@@ -1,3 +1,5 @@
+#replicaion qc status splink query
+
 host=* source="/opt/share/metadata_qc*" "QCing status" OR "Error No Matching MAM asset found"| 
 rex "^(?:[^\[\n]*\[){4}(?P<P2M_Replication_QCStatus_Title>[^\]]+)" | rex "^(?:[^\[\n]*\[){5}(?P<P2M_Replication_QC_MAMID>\w+)" | 
 rex "^(?:[^\]\n]*\]){5}\.\s+(?P<P2M_Replication_QCStatus>.+)" | 
