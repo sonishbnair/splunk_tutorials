@@ -1,0 +1,8 @@
+host=* source="/opt/share/metadata_qc*" "QCing status" OR "Error No Matching MAM asset found"| 
+rex "^(?:[^\[\n]*\[){4}(?P<P2M_Replication_QCStatus_Title>[^\]]+)" | rex "^(?:[^\[\n]*\[){5}(?P<P2M_Replication_QC_MAMID>\w+)" | 
+rex "^(?:[^\]\n]*\]){5}\.\s+(?P<P2M_Replication_QCStatus>.+)" | 
+eval P2M_Replication_QCStatus=replace(P2M_Replication_QCStatus, "QCing status", "") |
+eval _time = strftime(_time, "%m/%d/%y %H:%M:%S")| fillnull value="None" P2M_Replication_QC_MAMID | 
+fillnull value="No Matching MAM asset found" P2M_Replication_QCStatus  | 
+rename _time as Time P2M_Replication_QCStatus_Title as "PAM Title" P2M_Replication_QC_MAMID as "MAM ID" P2M_Replication_QCStatus as "PAM2MAM Replication QC Status"  |
+table Time "PAM Title" "MAM ID" "PAM2MAM Replication QC Status"
